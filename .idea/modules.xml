@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/01-在活动中使用menu/01-在活动中使用menu.iml" filepath="$PROJECT_DIR$/01-在活动中使用menu/01-在活动中使用menu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/02-Intent/02-Intent.iml" filepath="$PROJECT_DIR$/02-Intent/02-Intent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FirstCode.iml" filepath="$PROJECT_DIR$/FirstCode.iml" />
+    </modules>
+  </component>
+</project>
