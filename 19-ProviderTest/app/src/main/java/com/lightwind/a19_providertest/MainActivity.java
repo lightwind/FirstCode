@@ -1,10 +1,15 @@
 package com.lightwind.a19_providertest;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +23,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        NotificationManager manager = (NotificationManager) getSystemService(Context
+                .NOTIFICATION_SERVICE);
+
+
+        Notification notification = new NotificationCompat.Builder(this)
+                .setContentTitle("This is content title")
+                .setContentText("This is content text")
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap
+                        .ic_launcher_round))
+                .build();
+
+        manager.notify(1, notification);
+
         Button addData = (Button) findViewById(R.id.add_data);
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 values.put("name", "A Clash of Kings");
                 values.put("author", "George Marting");
                 values.put("pages", "1040");
-               Uri newUri = getContentResolver().insert(uri, values);
+                Uri newUri = getContentResolver().insert(uri, values);
                 newId = newUri.getPathSegments().get(1);
             }
         });
