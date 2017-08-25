@@ -1,0 +1,113 @@
+package com.lightwind.a23_playvideotest;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+import android.widget.VideoView;
+
+import java.io.File;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private VideoView mVideoView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mVideoView = (VideoView) findViewById(R.id.video_view);
+        Button play = (Button) findViewById(R.id.play);
+        Button pause = (Button) findViewById(R.id.pause);
+        Button replay = (Button) findViewById(R.id.replay);
+
+        play.setOnClickListener(this);
+        pause.setOnClickListener(this);
+        replay.setOnClickListener(this);
+
+        // SD卡运行时权限
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission
+                .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            // 初始化MediaPlayer
+            initVideoPath();
+        }
+    }
+
+    /**
+     * 初始化MediaPlayer
+     */
+    private void initVideoPath() {
+        File file = new File(Environment.getExternalStorageDirectory(), "video.mp4");
+        // 指定视频文件的路径
+        mVideoView.setVideoPath(file.getPath());
+    }
+
+    /**
+     * 运行时权限处理
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager
+                        .PERMISSION_GRANTED) {
+                    initVideoPath();
+                } else {
+                    Toast.makeText(this, "拒绝权限，程序将无法启动！", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 按钮的点击监听
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.play:
+                if (!mVideoView.isPlaying()) {
+                    // 播放视频
+                    mVideoView.start();
+                }
+                break;
+            case R.id.pause:
+                if (mVideoView.isPlaying()) {
+                    // 暂停播放
+                    mVideoView.pause();
+                }
+                break;
+            case R.id.replay:
+                if (mVideoView.isPlaying()) {
+                    // 重新播放
+                    mVideoView.resume();
+                }
+                break;
+        }
+    }
+
+    /**
+     * 释放资源
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mVideoView != null) {
+            mVideoView.suspend();
+        }
+    }
+}
